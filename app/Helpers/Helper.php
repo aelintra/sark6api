@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use App\CustomClasses\Ami;
+
 
 if (!function_exists('move_request_to_model')) {
     /**
@@ -171,6 +173,31 @@ if (!function_exists('get_route_class')) {
     }
 
 }
+
+if (!function_exists('get_ami_handle')) {
+
+/**
+ * get_ami_handle get a handle
+ * @return object ref AMI
+ */
+    function get_ami_handle() {
+
+        if  (!`/bin/ps -e | /bin/grep asterisk | /bin/grep -v grep`) {
+            Response::make(['message' => 'PBX not running'],503)->send();
+        }
+
+        $params = array('server' => '127.0.0.1', 'port' => '5038');
+        $amiHandle = new Ami($params);
+        $amiconrets = $amiHandle->connect();
+        if ( !$amiconrets ) {            
+            Response::make(['message' => 'Service Unavailable - Could not connect to the PBX'],503)->send();
+        }
+        else {
+            $amiHandle->login('sark','mysark');
+        } 
+        return $amiHandle;  
+    } 
+}   
 
 
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Response;
 use Validator;
 use DB;
+use App\CustomClasses\Ami;
 
 class ExtensionController extends Controller
 {
@@ -49,6 +50,26 @@ class ExtensionController extends Controller
 
     	return $extension;
     }
+
+/**
+ * Return named extension runtime values from the PBX
+ * 
+ * @param  Extension
+ * @return extension object
+ */
+    public function showruntime (Extension $extension) {
+
+        $amiHandle = get_ami_handle();
+
+        $rets = array();
+        $rets['cfim'] = $amiHandle->GetDB('cfim', $extension->pkey);
+        $rets['cfbs'] = $amiHandle->GetDB('cfbs', $extension->pkey);
+        $rets['ringdelay'] = $amiHandle->GetDB('ringdelay', $extension->pkey);
+
+        $amiHandle->logout();
+
+        return Response::json($rets,200);
+    }    
 
 /**
  * Create a new MAILBOX extension instance
@@ -222,7 +243,48 @@ class ExtensionController extends Controller
 		
     } 
 
-    /**
+/**
+ * Return named extension runtime from the PBX
+ * 
+ * @param  Extension
+ * @return extension object
+ */
+    public function updateruntime (Request $request, Extension $extension) {
+
+        $validator = Validator::make($request->all(),[
+            'cfim' => 
+                ['regex:/^\+?\d+$/'],
+                ['nullable'],
+            'cfbs' => 
+                ['regex:/^\+?\d+$/'],
+                ['nullable'],            
+            'ringdelay' => 'numeric|nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),422);
+        }
+
+        $amiHandle = get_ami_handle();
+
+        if (isset($request->cfim)) {
+           $amiHandle->PutDB('cfim', $extension->pkey, $request->cfim); 
+        }
+
+        if ($request->cfbs) {
+           $amiHandle->PutDB('cfbs', $extension->pkey, $request->cfbs); 
+        }        
+
+        if ($request->ringdelay) {
+           $amiHandle->PutDB('ringdelay', $extension->pkey, $request->ringdelay); 
+        }
+
+        $amiHandle->logout();
+
+        return Response::json(null,204);
+    }        
+
+/**
  * Delete  Extension instance
  * @param  Extension
  * @return NULL
@@ -413,5 +475,5 @@ class ExtensionController extends Controller
 			}		
 		}
 	}
-    
+
 }

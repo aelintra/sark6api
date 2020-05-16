@@ -25,6 +25,12 @@ Route::post('agents', 'AgentController@save');
 Route::put('agents/{agent}', 'AgentController@update');
 Route::delete('agents/{agent}', 'AgentController@delete');
 
+Route::get('backups', 'BackupController@index');
+Route::get('backups/{backup}', 'BackupController@show');
+Route::post('backups', 'BackupController@store');
+Route::put('backups/{backup}', 'BackupController@update');
+Route::put('backups/{backup}', 'BackupController@delete');
+
 Route::get('coscloses', 'CosCloseController@index');
 Route::get('coscloses/{cosclose}', 'CosCloseController@show');
 Route::post('coscloses', 'CosCloseController@save');
@@ -59,11 +65,13 @@ Route::get('destinations', 'DestinationController@index');
 
 Route::get('extensions', 'ExtensionController@index');
 Route::get('extensions/{extension}', 'ExtensionController@show');
+Route::get('extensions/{extension}/runtime', 'ExtensionController@showruntime');
 Route::post('extensions/mailbox', 'ExtensionController@mailbox');
 Route::post('extensions/provisioned', 'ExtensionController@provisioned');
 Route::post('extensions/vxt', 'ExtensionController@vxt');
 Route::post('extensions/unprovisioned', 'ExtensionController@unprovisioned');
 Route::put('extensions/{extension}', 'ExtensionController@update');
+Route::put('extensions/{extension}/runtime', 'ExtensionController@updateruntime');
 Route::delete('extensions/{extension}', 'ExtensionController@delete');
 
 Route::get('holidaytimers', 'HolidayTimerController@index');
@@ -84,11 +92,24 @@ Route::post('ivrs', 'IvrController@save');
 Route::put('ivrs/{ivr}', 'IvrController@update');
 Route::delete('ivrs/{ivr}', 'IvrController@delete');
 
+Route::get('snapshots', 'SnapShotController@index');
+Route::get('snapshots/{snapshot}', 'SnapShotController@show');
+Route::post('snapshots', 'SnapShotController@save');
+Route::put('snapshots/{snapshot}', 'SnapShotController@update');
+
+Route::get('snapshots', 'SnapShotController@index');
+Route::get('snapshots/{snapshot}', 'SnapShotController@show');
+Route::post('snapshots', 'SnapShotController@save');
+
 Route::get('queues', 'QueueController@index');
 Route::get('queues/{queue}', 'QueueController@show');
 Route::post('queues', 'QueueController@save');
 Route::put('queues/{queue}', 'QueueController@update');
 Route::delete('queues/{queue}', 'QueueController@delete');
+
+Route::get('snapshots', 'SnapShotController@index');
+Route::get('snapshots/{snapshot}', 'SnapShotController@show');
+Route::post('snapshots', 'SnapShotController@save');
 
 Route::get('ringgroups', 'RingGroupController@index');
 Route::get('ringgroups/{ringgroup}', 'RingGroupController@show');
@@ -101,6 +122,13 @@ Route::get('routes/{route}', 'RouteController@show');
 Route::post('routes', 'RouteController@save');
 Route::put('routes/{route}', 'RouteController@update');
 Route::delete('routes/{route}', 'RouteController@delete');
+
+Route::get('syscommands', 'SysCommandController@index');
+Route::get('syscommands/commit', 'SysCommandController@commit');
+Route::get('syscommands/reboot', 'SysCommandController@reboot');
+Route::get('syscommands/pbxrunstate', 'SysCommandController@pbxrunstate');
+Route::get('syscommands/pbxstart', 'SysCommandController@start');
+Route::get('syscommands/pbxstop', 'SysCommandController@stop');
 
 Route::get('sysglobals', 'SysglobalController@index');
 Route::put('sysglobals', 'SysglobalController@update');

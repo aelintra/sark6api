@@ -65,6 +65,11 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'backups' => [
+            'driver' => 'local',
+            'root' => '/opt/sark/bkup',
+        ],
+
     ],
 
     /*
