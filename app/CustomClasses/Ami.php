@@ -63,6 +63,8 @@
  */
 
 namespace App\CustomClasses;
+use Illuminate\Support\Facades\Log;
+
 
 class Ami
 {
@@ -284,6 +286,29 @@ class Ami
 
             Response::make(['message' => "No AMI Command in input"],503)->send();
         }
+        return $response;
+    }
+
+    /**
+     * Send a query to the AMI. Acceptable commands 
+     * are dependent on the Asterisk installation.
+     *
+     * @param string $command Command to execute on server
+     *
+     * @return string|bool
+     */
+    public function amiQuery($query)
+    {
+        $this->_checkSocket();
+        $query .= "\r\n";
+        Log::info("Ami Running query\n $query");
+        $response = $this->_sendCommand($query);
+
+//        if (strpos($response, 'No such command') !== false) {
+//
+//            Response::make(['message' => "No AMI Command in input"],503)->send();
+//        }
+
         return $response;
     }
 
@@ -597,6 +622,8 @@ class Ami
 	}
 	return FALSE;
 }
+
+
 
 /*	Haven't done this yet - sark doesn't need it
  * 

@@ -70,6 +70,10 @@ return [
             'root' => '/opt/sark/bkup',
         ],
 
+        'snapshots' => [
+            'driver' => 'local',
+            'root' => '/opt/sark/snap',
+        ],
     ],
 
     /*

@@ -53,7 +53,7 @@ class TenantController extends Controller
  * 
  * @param  Tenant
  */
-    public function store (Request $request) {
+    public function save (Request $request) {
 
     	$this->updateableColumns['pkey'] = 'required';
     	$this->updateableColumns['description'] = 'string|required';

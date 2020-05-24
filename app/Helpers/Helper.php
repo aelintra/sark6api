@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\CustomClasses\Ami;
 
 
@@ -174,6 +175,194 @@ if (!function_exists('get_route_class')) {
 
 }
 
+
+if (!function_exists('create_new_backup')) {
+    /**
+     * checks host for valid IP or valid domain name
+     *
+     * @param none
+     *
+     * @return backup filename
+     *
+     * */
+    function create_new_backup() {
+
+        $backupSet = [
+            '/opt/sark/db/sark.db',
+            '/usr/share/asterisk/sounds',
+            '/var/spool/asterisk/voicemail',
+            '/etc/asterisk',
+            '/etc/shorewall',
+            '/tmp/sark.local.ldif'
+        ];
+
+        shell_exec('sudo /usr/sbin/slapcat > /tmp/sark.local.ldif');
+        $newBackupName = "sarkbak." . time() . ".zip";
+       
+        foreach($backupSet as $file) { 
+            if(file_exists($file)) {
+                Log::info("zipping " . $file); 
+                shell_exec("/usr/bin/zip -r /tmp/$newBackupName $file");
+            } 
+            else {
+                Log::info($file . " not found");
+            }
+        } 
+        shell_exec("sudo /bin/mv /tmp/$newBackupName /opt/sark/bkup/");
+        shell_exec("sudo /bin/chown www-data:www-data /opt/sark/bkup/$newBackupName ");
+        shell_exec("sudo /bin/chmod 644 /opt/sark/bkup/$newBackupName ");
+        return $newBackupName;  
+
+    }
+
+}
+
+if (!function_exists('create_new_snapshot')) {
+    /**
+     * checks host for valid IP or valid domain name
+     *
+     * @param none
+     *
+     * @return snap file name
+     *
+     * */
+    function create_new_snapshot() {
+
+        $newSnapshotName = "sark.db." . time();
+        shell_exec("sudo /bin/cp /opt/sark/db/sark.db /opt/sark/snap/$newSnapshotName");
+        shell_exec("sudo /bin/chown www-data:www-data /opt/sark/snap/$newSnapshotName");
+        shell_exec("sudo /bin/chmod 644 /opt/sark/snap/$newSnapshotName");
+        return $newSnapshotName;  
+
+    }
+
+}
+
+
+if (!function_exists('restore_from_backup')) {
+
+function restore_from_backup($request) {
+    
+/* 
+ * Unzip the backup file
+ */
+    if (!file_exists("/opt/sark/bkup/" . $request->backup)) {
+        Log::info("Requested restore set not found");
+        return 404;
+    }
+
+/* 
+ * start restore
+ */
+
+    $tempDname = "/tmp/bkup" . time();
+    shell_exec("sudo /bin/mkdir $tempDname");
+    $unzipCmd = "sudo /usr/bin/unzip /opt/sark/bkup/" . $request->backup . " -d $tempDname";
+    shell_exec($unzipCmd);
+    if (!file_exists($tempDname)) {
+        Log::info("Restore unzip did not create a directory!");
+        return 500;
+    }
+    
+/*
+ * now we can begin the restore
+ */     
+    if ( $request->restoredb === true) {
+        if (file_exists($tempDname . '/opt/sark/db/sark.db')) {
+            Log::info("Restoring the Database from $tempDname/opt/sark/db/sark.db");
+            shell_exec("sudo /bin/cp -f $tempDname/opt/sark/db/sark.db  /opt/sark/db/sark.db");
+            Log::info("Setting DB ownership");
+            shell_exec("sudo /bin/chown www-data:www-data  /opt/sark/db/sark.db");
+            Log::info("Running the reloader to sync versions");
+            shell_exec("sudo /bin/sh /opt/sark/scripts/srkV4reloader.sh");      
+            Log::info("Database restore complete");
+            Log::info("Database RESTORED");
+        }
+        else {
+            Log::info("No Database in backup set - request ignored");
+            Log::info("Database PRESERVED");
+        }           
+    }
+    else {
+        Log::info("Database PRESERVED");  
+    }
+
+    if ( $request->restoreasterisk === true ) {
+        if (file_exists($tempDname . '/etc/asterisk')) {
+            shell_exec("sudo /bin/rm -rf /etc/asterisk/*");
+            shell_exec("sudo /bin/cp -a  $tempDname/etc/asterisk/* /etc/asterisk");
+            shell_exec("sudo /bin/chown asterisk:asterisk /etc/asterisk/*");
+            Log::info("Asterisk files RESTORED");
+        }
+        else {
+            Log::info("No Asterisk files in backup set; request ignored");
+            Log::info("<p>Asterisk Files PRESERVED");
+        }       
+    }
+    else {
+        Log::info("Asterisk Files PRESERVED");    
+    }   
+                        
+    if ( $request->restoreusergreets  === true) {
+        if (glob($tempDname . '/usr/share/asterisk/sounds/usergreeting*')) {
+            shell_exec("sudo /bin/rm -rf /usr/share/asterisk/sounds/usergreeting*");
+            shell_exec("sudo /bin/cp -a  $tempDname/usr/share/asterisk/sounds/usergreeting* /usr/share/asterisk/sounds");
+            shell_exec("sudo / bin/chown asterisk:asterisk /usr/share/asterisk/sounds/usergreeting*");
+            Log::info("Greeting files RESTORED");
+        }
+        else {
+            Log::info("No greeting files in backup set; request ignored");
+            Log::info("Greeting files PRESERVED");
+        }
+    }
+    else {
+        Log::info("Greeting files PRESERVED");    
+    }
+        
+    if ( $request->restorevmail === true) {
+        if (file_exists($tempDname . '/var/spool/asterisk/voicemail/default')) {
+            shell_exec("sudo /bin/rm -rf /var/spool/asterisk/voicemail/default");
+            shell_exec("sudo /bin/cp -a $tempDname/var/spool/asterisk/voicemail/default /var/spool/asterisk/voicemail");
+            shell_exec("sudo /bin/chown -R asterisk:asterisk /var/spool/asterisk/voicemail/default");
+            Log::info("Voicemail files RESTORED");
+        }
+        else {
+            Log::info("No voicemail files in backup set; request ignored");
+            Log::info("Voicemail files PRESERVED");
+        }
+    }
+    else {
+        Log::info("Voicemail files PRESERVED");   
+    }
+    
+    if ( $request->restoreldap === true) {
+        if (file_exists($tempDname . '/tmp/sark.local.ldif')) {
+            shell_exec("sudo /etc/init.d/slapd stop");
+            shell_exec("sudo /bin/rm -rf /var/lib/ldap/*");
+            shell_exec("sudo /usr/sbin/slapadd -l " . $tempDname . "/tmp/sark.local.ldif");
+            shell_exec("sudo /bin/chown openldap:openldap /var/lib/ldap/*");
+            shell_exec("sudo /etc/init.d/slapd start");  
+            Log::info("LDAP Directory RESTORED");
+        }
+        else {
+            Log::info("No LDAP Directory in backup set; request ignored");
+            Log::info("LDAP Directory PRESERVED");
+        }
+    }
+    else {
+        Log::info("LDAP Directory PRESERVED");    
+    }   
+    
+    shell_exec("sudo /bin/rm -rf $tempDname");
+    Log::info("Temporary work files deleted");
+    Log::info("Requesting Asterisk reload");
+    shell_exec("sudo /bin/sh /opt/sark/scripts/srkreload");
+    Log::info("System Regen complete");
+
+    return 200; 
+    } 
+}
+
 if (!function_exists('get_ami_handle')) {
 
 /**
@@ -197,12 +386,114 @@ if (!function_exists('get_ami_handle')) {
         } 
         return $amiHandle;  
     } 
-}   
+} 
 
+if (!function_exists('pbx_is_running')) {
+    function pbx_is_running() {
 
+        if  (`/bin/ps -e | /bin/grep asterisk | /bin/grep -v grep`) {
+            return true;
+        }
 
+        return false; 
+    }
+}
 
+if (!function_exists('get_peer_array')) {
+    function get_peer_array($iax=false) {
 
+    $amiHdle = get_ami_handle();
 
+    $sip_peers = array();   
+    if ($iax) {
+        $amisiprets = $amiHdle->getIaxPeers();
+    }
+    else {
+        $amisiprets = $amiHdle->getSipPeers();
+    }
+    $sip_peers = build_peer_array($amisiprets);
 
+    $amiHdle->logout();
+    return $sip_peers;
 
+    }
+} 
+
+if (!function_exists('build_peer_array')) {
+    function build_peer_array($amirets) {
+/*
+ * build an array of peers by cleaning up the AMI output
+ * (which contains stuff we don't want).
+ */ 
+    $peer_array=array();
+    $lines = explode("\r\n",$amirets);  
+//    print_r($lines);
+    $peer = 0;
+    foreach ($lines as $line) {
+//        echo $line . PHP_EOL;
+        // ignore lines that aren't couplets
+        if (!preg_match(' /:/ ',$line)) { 
+                continue;
+        }
+        
+        // parse the couplet    
+        $couplet = explode(': ', $line);
+        
+        // ignore events and ListItems
+        if ($couplet[0] == 'Event' || $couplet[0] == 'ListItems' || $couplet[0] == 'EventList') {
+            continue;
+        }
+        
+        //check for a new peer and set a new key if we have one
+        if ($couplet[0] == 'ObjectName') {
+            preg_match(' /^(.*)\// ',$couplet[1],$matches);
+            if (isset($matches[1])) {
+                $peer = $matches[1];
+            }
+            else {
+                $peer = $couplet[1];
+            }
+        }
+        else {
+            if (!$peer) {
+                continue;
+            }
+            else {
+                $peer_array [$peer][$couplet[0]] = $couplet[1];
+            }
+        }
+    }
+    return $peer_array; 
+}
+}
+
+if (!function_exists('build_ami_array')) {
+    function build_ami_array($amirets) {
+/*
+ * build an array of peers by cleaning up the AMI output
+ * (which contains stuff we don't want).
+ */ 
+    $amiArray=array();
+    $lines = explode("\r\n",$amirets);  
+//print_r($lines);
+    foreach ($lines as $line) {
+        
+        // ignore lines that aren't couplets
+        if (!preg_match(' /:/ ',$line)) { 
+                continue;
+        }
+        // parse the couplet    
+        $couplet = explode(': ', $line);
+
+        //check for a new peer and set a new key if we have one
+        if ($couplet[0] == 'Response') {
+            continue;
+        }
+        if (!empty($couplet[1])) {
+            $amiArray [$couplet[0]] = $couplet[1];
+        }
+       
+    }
+    return $amiArray; 
+}
+}

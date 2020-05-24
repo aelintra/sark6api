@@ -49,64 +49,98 @@ class BackupController extends Controller
     }
 
 /**
- * Return named Backup instance
+ * Return (Download) named Backup instance
  * 
  * @param  Backup
- * @return Backup zip file
+ * @return zip file
  */
-    public function show ($backup) {
+    public function download ($backup) {
 
         return Storage::disk('backups')->download($backup);
 
     }
 
- /**
- * Save new Backup instance
+/**
+ * create a new Backup instance
  * 
  * @param  Backup
+ * @return new Backup zip file name
  */
-    public function store (Request $request) {
+    public function new () {
 
-//        $path = $request->file('backups')->storeAs(
-//            'backups', $request()->id
-//        );
+        return response()->json(['newbackupname' => create_new_backup()]);
 
-        $path = Storage::putFileAs(
-                'backups', $request->disk('backups'), $request->id
-        );
     }
 
  /**
- * update tenant instance
+ * Save new uploaded Backup instance
  * 
  * @param  Backup
- * @return tenant object
+ */
+    public function save (Request $request) {
+
+
+        $validator = Validator::make($request->all(),[
+            'uploadzip' => 'required|file|mimetypes:application/zip',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),422);
+        }
+
+        $fpath = $request->uploadzip->storeAs('bkups', $request->uploadzip->getClientOriginalName());
+        $fullpath = storage_path() . "/app/" . $fpath;
+        shell_exec("/bin/mv $fullpath /opt/sark/bkup");
+        return Response::json(['Uploaded ' . $fpath],200);
+
+    }
+
+ /**
+ * instantiate elements of a backup instance
+ *
+ * The backup contains the entire PBX data.  Choose the restore
+ * you want by adding post entries 
+ * 
+ * POST values are boolean.  They can be true, false, 1, 0, "1", or "0".
+ *
+ *  resetdb=>true - restore the pbx db
+ *  resetasterisk=>true - restore the asterisk files. N.B. be careful with this
+ *  resetusergreets=>true - restore usergreetings
+ *  resetvmail->true - restore voicemail
+ *  resetldap->true - restore ldap contacts database 
+ *  
+ * 
+ * @param  Backup name
+ * 
+ * @return 200
  */
     public function update(Request $request, $backup) {
 
 
 // Validate         
-    	$validator = Validator::make($request->all(),$this->updateableColumns);
+    	$validator = Validator::make($request->all(),[         
+            'restoredb' => 'boolean',
+            'restoreasterisk' => 'boolean',
+            'restoreusergreeting' => 'boolean',
+            'restorevmail' => 'boolean',
+            'restoreldap' => 'boolean'
+        ]);
 
     	if ($validator->fails()) {
     		return response()->json($validator->errors(),422);
     	}		
 
-// Move post variables to the model  
+		if (!file_exists("/opt/sark/bkup/$backup")) {
+            return Response::json(['Error' => "backup file not found"],404);
+        }   
 
-		move_request_to_model($request,$backup,$this->updateableColumns);  	
+        $rets = (restore_from_backup($request));
 
-// store the model if it has changed
-    	try {
-    		if ($backup->isDirty()) {
-    			$backup->save();
-    		}
+        if ($rets != 200) {
+            return Response::json(['Error' => "$backup has errors see logs for details"],$rets); 
+        }
 
-        } catch (\Exception $e) {
-    		return Response::json(['Error' => $e->getMessage()],409);
-    	}
-
-		return response()->json($backup, 200);
+		return response()->json(['restored' => $backup], 200);
     }   
 
 /**
@@ -118,11 +152,11 @@ class BackupController extends Controller
 
 // Don't allow deletion of default tenant
 
-        if ($backup->pkey == 'default') {
-           return Response::json(['Error - Cannot delete default tenant!'],409); 
+        if (!file_exists("/opt/sark/bkup/$backup")) {
+           return Response::json(['Error' => "$backup not found in backup set"],404); 
         }
 
-        $backup->delete();
+        shell_exec("/bin/rm -r /opt/sark/bkup/$backup");
 
         return response()->json(null, 204);
     }

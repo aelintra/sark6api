@@ -17,13 +17,15 @@ class SysCommandController extends Controller
  */
 {
     //
+    //
+    //Route::get('syscommands/commit', 'SysCommandController@commit');
 
     private $commands = [
     	'commit' => 'null',
     	'reboot' => 'null',
-    	'start' => 'null',
-    	'stop' => 'null',
-        'upstate' => 'returns PBX state (boolean)'
+    	'pbxstart' => 'null',
+    	'pbxstop' => 'null',
+        'pbxrunstate' => 'returns PBX state (boolean)'
     ];
 /**
  * Return SysCommand Index in pkey order asc

@@ -25,11 +25,33 @@ Route::post('agents', 'AgentController@save');
 Route::put('agents/{agent}', 'AgentController@update');
 Route::delete('agents/{agent}', 'AgentController@delete');
 
+Route::get('astami', 'AstAmiController@index');
+
+Route::get('astami/CoreSettings', 'AstAmiController@coresettings');
+Route::get('astami/CoreStatus', 'AstAmiController@corestatus');
+
+Route::get('astami/DBget/{id}/{key}', 'AstAmiController@dbget');
+Route::get('astami/ExtensionState/{id}{context?}', 'AstAmiController@extensionstate');
+Route::get('astami/MailboxCount/{id}', 'AstAmiController@mailboxcount');
+Route::get('astami/MailboxStatus/{id}', 'AstAmiController@mailboxstatus');
+Route::get('astami/QueueStatus/{id}', 'AstAmiController@queuestatus');
+Route::get('astami/QueueSummary/{id}', 'AstAmiController@queuesummary');
+Route::get('astami/Reload', 'AstAmiController@reload');
+Route::get('astami/SIPshowpeer/{id}', 'AstAmiController@sipshowpeer');
+Route::get('astami/{action}', 'AstAmiController@getlist');
+
+Route::post('astami/originate', 'AstAmiController@originate');
+
+Route::put('astami/DBdel/{id}/{key}', 'AstAmiController@dbdel');
+Route::put('astami/DBput/{id}/{key}/{value}', 'AstAmiController@dbput');
+
+
 Route::get('backups', 'BackupController@index');
-Route::get('backups/{backup}', 'BackupController@show');
-Route::post('backups', 'BackupController@store');
+Route::get('backups/new', 'BackupController@new');
+Route::get('backups/{backup}', 'BackupController@download');
+Route::post('backups', 'BackupController@save');
 Route::put('backups/{backup}', 'BackupController@update');
-Route::put('backups/{backup}', 'BackupController@delete');
+Route::delete('backups/{backup}', 'BackupController@delete');
 
 Route::get('coscloses', 'CosCloseController@index');
 Route::get('coscloses/{cosclose}', 'CosCloseController@show');
@@ -74,6 +96,13 @@ Route::put('extensions/{extension}', 'ExtensionController@update');
 Route::put('extensions/{extension}/runtime', 'ExtensionController@updateruntime');
 Route::delete('extensions/{extension}', 'ExtensionController@delete');
 
+Route::get('firewall', 'FirewallController@index');
+Route::get('firewall/ipv4', 'FirewallController@ipv4');
+Route::get('firewall/ipv6', 'FirewallController@ipv4');
+Route::put('firewall/ipv4', 'FirewallController@updateipv4');
+Route::put('firewall/ipv6', 'FirewallController@updateipv6');
+Route::put('firewall/ipv4/{command}', 'FirewallController@command');
+
 Route::get('holidaytimers', 'HolidayTimerController@index');
 Route::get('holidaytimers/{holidaytimer}', 'HolidayTimerController@show');
 Route::post('holidaytimers', 'HolidayTimerController@save');
@@ -92,15 +121,6 @@ Route::post('ivrs', 'IvrController@save');
 Route::put('ivrs/{ivr}', 'IvrController@update');
 Route::delete('ivrs/{ivr}', 'IvrController@delete');
 
-Route::get('snapshots', 'SnapShotController@index');
-Route::get('snapshots/{snapshot}', 'SnapShotController@show');
-Route::post('snapshots', 'SnapShotController@save');
-Route::put('snapshots/{snapshot}', 'SnapShotController@update');
-
-Route::get('snapshots', 'SnapShotController@index');
-Route::get('snapshots/{snapshot}', 'SnapShotController@show');
-Route::post('snapshots', 'SnapShotController@save');
-
 Route::get('queues', 'QueueController@index');
 Route::get('queues/{queue}', 'QueueController@show');
 Route::post('queues', 'QueueController@save');
@@ -108,8 +128,11 @@ Route::put('queues/{queue}', 'QueueController@update');
 Route::delete('queues/{queue}', 'QueueController@delete');
 
 Route::get('snapshots', 'SnapShotController@index');
-Route::get('snapshots/{snapshot}', 'SnapShotController@show');
+Route::get('snapshots/new', 'SnapShotController@new');
+Route::get('snapshots/{snapshot}', 'SnapShotController@download');
 Route::post('snapshots', 'SnapShotController@save');
+Route::put('snapshots/{snapshot}', 'SnapShotController@update');
+Route::delete('snapshots/{snapshot}', 'SnapShotController@delete');
 
 Route::get('ringgroups', 'RingGroupController@index');
 Route::get('ringgroups/{ringgroup}', 'RingGroupController@show');
@@ -135,13 +158,13 @@ Route::put('sysglobals', 'SysglobalController@update');
 
 Route::get('templates', 'TemplateController@index');
 Route::get('templates/{template}', 'TemplateController@show');
-Route::post('templates', 'TemplateController@store');
+Route::post('templates', 'TemplateController@save');
 Route::put('templates/{template}', 'TemplateController@update');
 Route::delete('templates/{template}', 'TemplateController@delete');
 
 Route::get('tenants', 'TenantController@index');
 Route::get('tenants/{tenant}', 'TenantController@show');
-Route::post('tenants', 'TenantController@store');
+Route::post('tenants', 'TenantController@save');
 Route::put('tenants/{tenant}', 'TenantController@update');
 Route::delete('tenants/{tenant}', 'TenantController@delete');
 

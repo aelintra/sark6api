@@ -44,7 +44,7 @@ class TemplateController extends Controller
  * @param  Template
  * @return template object
  */
-    public function store (Request $request) {
+    public function save (Request $request) {
 
     	$this->updateableColumns['pkey'] = 'required';
     	$this->updateableColumns['technology'] = 'required|in:SIP,Descriptor,BLF Template';
