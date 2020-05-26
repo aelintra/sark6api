@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Response;
 use Validator;
-use Storage;
 
 class FirewallController extends Controller
 {
@@ -14,89 +13,144 @@ class FirewallController extends Controller
 
     //
 /**
- * Return Backup Index in pkey order asc
+ * Return ipv4 Firewall Index 
  * 
- * @return Backups
+ * @return rules
  */
     public function ipv4 () {
 
-        $file = file("/etc/shorewall/sark_rules",FILE_IGNORE_NEW_LINES) or die("Could not read file $pkey !");
-
-        $i = 1;
-        $p_array =array();
-
-        foreach ($file as $line){
-            $p_array["rule" . $i] = $line;
-            $i++;
-        } 
-        return response()->json($p_array,200);
+        $file = file("/etc/shorewall/sark_rules",FILE_IGNORE_NEW_LINES);
+        return response()->json($this->set_output ($file),200);
     }
 
+/**
+ * Return ipv6 Firewall Index 
+ * 
+ * @return rules
+ */
+    public function ipv6 () {
 
- /**
- * instantiate elements of a backup instance
+        $file = file("/etc/shorewall6/sark_rules6",FILE_IGNORE_NEW_LINES);
+        return response()->json($this->set_output ($file),200);
+    } 
+
+/**
+ * [set_output build an array from the firewall rules]
+ * @param [Array] $ruleArray
+ */
+    private function set_output ($file) {
+        $ruleArray =array();
+        foreach ($file as $line){
+            $ruleArray[ "rules" ][] = $line;
+        }
+        return($ruleArray); 
+    }
+
+ /** 
  *
- * The backup contains the entire PBX data.  Choose the restore
- * you want by adding post entries 
- * 
- * POST values are boolean.  They can be true, false, 1, 0, "1", or "0".
- *
- *  resetdb=>true - restore the pbx db
- *  resetasterisk=>true - restore the asterisk files. N.B. be careful with this
- *  resetusergreets=>true - restore usergreetings
- *  resetvmail->true - restore voicemail
- *  resetldap->true - restore ldap contacts database 
- *  
- * 
- * @param  Backup name
+ * save new ipv4 rules
+ * @param $request  
  * 
  * @return 200
  */
-    public function update(Request $request, $backup) {
+    public function ipv4save(Request $request) {
 
-
-// Validate         
-    	$validator = Validator::make($request->all(),[         
-            'restoredb' => 'boolean',
-            'restoreasterisk' => 'boolean',
-            'restoreusergreeting' => 'boolean',
-            'restorevmail' => 'boolean',
-            'restoreldap' => 'boolean'
+    // Validate         
+        $validator = Validator::make($request->all(),[         
+            'rules' => 'required',
         ]);
 
-    	if ($validator->fails()) {
-    		return response()->json($validator->errors(),422);
-    	}		
-
-		if (!file_exists("/opt/sark/bkup/$backup")) {
-            return Response::json(['Error' => "backup file not found"],404);
-        }   
-
-        $rets = (restore_from_backup($request));
-
-        if ($rets != 200) {
-            return Response::json(['Error' => "$backup has errors see logs for details"],$rets); 
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),422);
         }
 
-		return response()->json(['restored' => $backup], 200);
+        $tempFileName = $this->set_new_rules($request);
+
+        shell_exec("sudo /bin/mv /tmp/$tempFileName /etc/shorewall/sark_rules");
+
+		return response()->json(['message' => "saved sark_rules"], 200);
+    }  
+
+/**
+ *  
+ * save new rules to /tmp
+ * @param $request  
+ * 
+ * @return 200
+ */
+    public function ipv6save(Request $request) {
+
+// Validate         
+        $validator = Validator::make($request->all(),[         
+            'rules' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),422);
+        }
+
+        $tempFileName = $this->set_new_rules($request);
+
+        shell_exec("sudo /bin/mv /tmp/$tempFileName /etc/shorewall6/sark_rules6");
+
+        return response()->json(['message' => "saved sark_rules"], 200);
+    }
+
+/**
+ *  
+ * save new rules to /tmp
+ * @param $request
+ * 
+ * @return 200
+ */
+    private function set_new_rules($request) {
+
+        $fname = "rules_" . time() . ".txt";
+        $file= fopen("/tmp/$fname","w") or die("Unable to open file!");;
+
+        foreach($request->rules as $rule) {
+            fwrite($file, $rule . PHP_EOL);
+        }   
+
+        fclose($file);
+
+        return $fname;
     }   
 
 /**
- * Delete tenant instance
- * @param  Backup
- * @return [type]
+ * 
+ * restart the ipv4 firewall
+ * @param  null
+ * @return msg
  */
-    public function delete($backup) {
+    public function ipv4restart() {
 
-// Don't allow deletion of default tenant
+        $rc = `sudo /sbin/shorewall check 2>&1`;
 
-        if (!file_exists("/opt/sark/bkup/$backup")) {
-           return Response::json(['Error' => "$backup not found in backup set"],404); 
+        if (! strchr($rc, 'ERROR')) {
+            $rc = `sudo /sbin/shorewall restart`;
+            return response()->json(['message' => "Shorewall restarted OK"], 200);
         }
-
-        shell_exec("/bin/rm -r /opt/sark/bkup/$backup");
-
-        return response()->json(null, 204);
+        $errorLines = explode("\n", $rc);
+        return response()->json($errorLines, 500);
     }
-    //
+
+/**
+ * 
+ * restart the ipv4 firewall
+ * @param  null
+ * @return msg
+ */
+    public function ipv6restart() {
+
+        $rc = `sudo /sbin/shorewall6 check 2>&1`;
+
+        if (! strchr($rc, 'ERROR')) {
+            $rc = `sudo /sbin/shorewall6 restart`;
+            return response()->json(['message' => "Shorewall restarted OK"], 200);
+        }
+        $errorLines = explode("\n", $rc);
+        return response()->json($errorLines, 500);
+    }
+
 }

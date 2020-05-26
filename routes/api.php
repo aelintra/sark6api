@@ -45,7 +45,6 @@ Route::post('astami/originate', 'AstAmiController@originate');
 Route::put('astami/DBdel/{id}/{key}', 'AstAmiController@dbdel');
 Route::put('astami/DBput/{id}/{key}/{value}', 'AstAmiController@dbput');
 
-
 Route::get('backups', 'BackupController@index');
 Route::get('backups/new', 'BackupController@new');
 Route::get('backups/{backup}', 'BackupController@download');
@@ -98,10 +97,16 @@ Route::delete('extensions/{extension}', 'ExtensionController@delete');
 
 Route::get('firewall', 'FirewallController@index');
 Route::get('firewall/ipv4', 'FirewallController@ipv4');
-Route::get('firewall/ipv6', 'FirewallController@ipv4');
-Route::put('firewall/ipv4', 'FirewallController@updateipv4');
-Route::put('firewall/ipv6', 'FirewallController@updateipv6');
-Route::put('firewall/ipv4/{command}', 'FirewallController@command');
+Route::get('firewall/ipv6', 'FirewallController@ipv6');
+Route::post('firewall/ipv4', 'FirewallController@ipv4save');
+Route::post('firewall/ipv6', 'FirewallController@ipv6save');
+Route::put('firewall/ipv4', 'FirewallController@ipv4restart');
+Route::put('firewall/ipv6', 'FirewallController@ipv6restart');
+
+Route::get('greetings', 'GreetingController@index');
+Route::get('greetings/{greeting}', 'GreetingController@download');
+Route::post('greetings', 'GreetingController@save');
+Route::delete('greetings/{greeting}', 'GreetingController@delete');
 
 Route::get('holidaytimers', 'HolidayTimerController@index');
 Route::get('holidaytimers/{holidaytimer}', 'HolidayTimerController@show');

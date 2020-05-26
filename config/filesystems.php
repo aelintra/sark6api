@@ -74,6 +74,11 @@ return [
             'driver' => 'local',
             'root' => '/opt/sark/snap',
         ],
+        
+        'greetings' => [
+            'driver' => 'local',
+            'root' => '/usr/share/asterisk/sounds',
+        ],        
     ],
 
     /*
