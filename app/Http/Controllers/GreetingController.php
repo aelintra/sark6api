@@ -33,7 +33,7 @@ class GreetingController extends Controller
             rsort($greetings);
         }
         else {
-            return Response::json(['Error' => 'Could not open sounds directory '],509);
+            return Response::json(['Error' => 'Could not open sounds directory '],404);
         }
 
         return response()->json($greetings,200);
@@ -48,7 +48,6 @@ class GreetingController extends Controller
     public function download ($greeting) {
 
         return Storage::disk('greetings')->download($greeting);
-//        return Response::download("/usr/share/asterisk/sounds/$greeting", $greeting, "application/octet-stream");
 
     }
 
@@ -90,9 +89,9 @@ class GreetingController extends Controller
    
 
 /**
- * Delete tenant instance
- * @param  Backup
- * @return [type]
+ * Delete greeting instance
+ * @param  greeting
+ * @return 204 null
  */
     public function delete($greeting) {
 
