@@ -12,7 +12,6 @@ class GreetingController extends Controller
 
 	private $updateableColumns = [];
 
-    //
 /**
  * Return Greetings Index in name order asc
  * 
