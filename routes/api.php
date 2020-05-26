@@ -126,6 +126,9 @@ Route::post('ivrs', 'IvrController@save');
 Route::put('ivrs/{ivr}', 'IvrController@update');
 Route::delete('ivrs/{ivr}', 'IvrController@delete');
 
+Route::get('logs', 'LogController@index');
+Route::get('logs/cdrs/{limit?}', 'LogController@showcdr');
+
 Route::get('queues', 'QueueController@index');
 Route::get('queues/{queue}', 'QueueController@show');
 Route::post('queues', 'QueueController@save');
