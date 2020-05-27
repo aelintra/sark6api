@@ -24,7 +24,7 @@ class RingGroupController extends Controller
 			'greeting' => [
 				'regex:/^usergreeting\d{4}$/',
 				'nullable'
-			]
+			],
 			'grouptype' => 'in:Ring,Hunt,Alias,Page',
 			'longdesc' => 'string|nullable',
 			'obeydnd' => 'in:YES,NO|nullable',
