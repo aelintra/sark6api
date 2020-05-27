@@ -37,7 +37,7 @@ class RingGroup extends Model
     // none user updateable columns
     protected $guarded = [
 
-    'greeting'
+    'greeting',
     'outcomerouteclass',
     'trunk',
 	'z_created',
