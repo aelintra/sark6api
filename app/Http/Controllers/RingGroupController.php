@@ -14,8 +14,8 @@ class RingGroupController extends Controller
         //
     	private $updateableColumns = [
 
-    	    'callerid' => 'string|nullable',
-			'calleridname' => 'alpha_dash|nullable',
+//    	    'callerid' => 'string|nullable',
+//			'calleridname' => 'alpha_dash|nullable',
 			'cluster' => 'exists:cluster,pkey', 
 			'devicerec' => 'in:default,None,OTR,OTRR,Inbound.Outbound,Both',
 			'dialparamshunt' => 'alpha|nullable',

@@ -25,25 +25,25 @@ Route::post('agents', 'AgentController@save');
 Route::put('agents/{agent}', 'AgentController@update');
 Route::delete('agents/{agent}', 'AgentController@delete');
 
-Route::get('astami', 'AstAmiController@index');
+Route::get('astamis', 'AstAmiController@index');
 
-Route::get('astami/CoreSettings', 'AstAmiController@coresettings');
-Route::get('astami/CoreStatus', 'AstAmiController@corestatus');
+Route::get('astamis/CoreSettings', 'AstAmiController@coresettings');
+Route::get('astamis/CoreStatus', 'AstAmiController@corestatus');
 
-Route::get('astami/DBget/{id}/{key}', 'AstAmiController@dbget');
-Route::get('astami/ExtensionState/{id}{context?}', 'AstAmiController@extensionstate');
-Route::get('astami/MailboxCount/{id}', 'AstAmiController@mailboxcount');
-Route::get('astami/MailboxStatus/{id}', 'AstAmiController@mailboxstatus');
-Route::get('astami/QueueStatus/{id}', 'AstAmiController@queuestatus');
-Route::get('astami/QueueSummary/{id}', 'AstAmiController@queuesummary');
-Route::get('astami/Reload', 'AstAmiController@reload');
-Route::get('astami/SIPshowpeer/{id}', 'AstAmiController@sipshowpeer');
-Route::get('astami/{action}', 'AstAmiController@getlist');
+Route::get('astamis/DBget/{id}/{key}', 'AstAmiController@dbget');
+Route::get('astamis/ExtensionState/{id}{context?}', 'AstAmiController@extensionstate');
+Route::get('astamis/MailboxCount/{id}', 'AstAmiController@mailboxcount');
+Route::get('astamis/MailboxStatus/{id}', 'AstAmiController@mailboxstatus');
+Route::get('astamis/QueueStatus/{id}', 'AstAmiController@queuestatus');
+Route::get('astamis/QueueSummary/{id}', 'AstAmiController@queuesummary');
+Route::get('astamis/Reload', 'AstAmiController@reload');
+Route::get('astamis/SIPshowpeer/{id}', 'AstAmiController@sipshowpeer');
+Route::get('astamis/{action}', 'AstAmiController@getlist');
 
-Route::post('astami/originate', 'AstAmiController@originate');
+Route::post('astamis/originate', 'AstAmiController@originate');
 
-Route::put('astami/DBdel/{id}/{key}', 'AstAmiController@dbdel');
-Route::put('astami/DBput/{id}/{key}/{value}', 'AstAmiController@dbput');
+Route::put('astamis/DBdel/{id}/{key}', 'AstAmiController@dbdel');
+Route::put('astamis/DBput/{id}/{key}/{value}', 'AstAmiController@dbput');
 
 Route::get('backups', 'BackupController@index');
 Route::get('backups/new', 'BackupController@new');
@@ -95,13 +95,12 @@ Route::put('extensions/{extension}', 'ExtensionController@update');
 Route::put('extensions/{extension}/runtime', 'ExtensionController@updateruntime');
 Route::delete('extensions/{extension}', 'ExtensionController@delete');
 
-Route::get('firewall', 'FirewallController@index');
-Route::get('firewall/ipv4', 'FirewallController@ipv4');
-Route::get('firewall/ipv6', 'FirewallController@ipv6');
-Route::post('firewall/ipv4', 'FirewallController@ipv4save');
-Route::post('firewall/ipv6', 'FirewallController@ipv6save');
-Route::put('firewall/ipv4', 'FirewallController@ipv4restart');
-Route::put('firewall/ipv6', 'FirewallController@ipv6restart');
+Route::get('firewalls/ipv4', 'FirewallController@ipv4');
+Route::get('firewalls/ipv6', 'FirewallController@ipv6');
+Route::post('firewalls/ipv4', 'FirewallController@ipv4save');
+Route::post('firewalls/ipv6', 'FirewallController@ipv6save');
+Route::put('firewalls/ipv4', 'FirewallController@ipv4restart');
+Route::put('firewalls/ipv6', 'FirewallController@ipv6restart');
 
 Route::get('greetings', 'GreetingController@index');
 Route::get('greetings/{greeting}', 'GreetingController@download');

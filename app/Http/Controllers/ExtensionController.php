@@ -259,7 +259,7 @@ class ExtensionController extends Controller
             'cfbs' => 
                 ['regex:/^\+?\d+$/'],
                 ['nullable'],            
-            'ringdelay' => 'numeric|nullable'
+            'ringdelay' => 'integer|nullable'
         ]);
 
         if ($validator->fails()) {

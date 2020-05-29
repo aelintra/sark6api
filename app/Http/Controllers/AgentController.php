@@ -16,7 +16,7 @@ class AgentController extends Controller
 
         'cluster' => 'exists:cluster,pkey',
         'name' => 'alpha_dash',
-        'passwd' => 'integer',
+        'passwd' => 'required|integer|min:1001|max:9999',
         'queue1' => 'exists:queue,pkey|nullable',
         'queue2' => 'exists:queue,pkey|nullable',
         'queue3' => 'exists:queue,pkey|nullable',
@@ -54,10 +54,10 @@ class AgentController extends Controller
     public function save(Request $request) {
 
 // validate 
-        $this->updateableColumns['pkey'] = 'required';
+        $this->updateableColumns['pkey'] = 'required|integer|min:1000|max:9999';
         $this->updateableColumns['cluster'] = 'required|exists:cluster,' . $request->cluster;
         $this->updateableColumns['name'] = 'required|alpha_dash';
-        $this->updateableColumns['passwd'] = 'required|integer';
+        $this->updateableColumns['passwd'] = 'required|integer|min:1001|max:9999';
 
         $agent = new Agent;
 

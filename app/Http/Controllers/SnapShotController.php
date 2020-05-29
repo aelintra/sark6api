@@ -81,7 +81,7 @@ class SnapShotController extends Controller
 
 
         $validator = Validator::make($request->all(),[
-            'uploadzip' => 'required|file|mimetypes:application/octet-stream',
+            'uploadsnap' => 'required|file|mimetypes:application/octet-stream',
         ]);
 
         if ($validator->fails()) {

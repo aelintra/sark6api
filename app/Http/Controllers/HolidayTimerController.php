@@ -34,7 +34,7 @@ class HolidayTimerController extends Controller
     }
 
 /**
- * Return named CosOpen model instance
+ * Return named Holidaytimer model instance
  * 
  * @param  HolidayTimer
  * @return HolidayTimer object
@@ -45,7 +45,7 @@ class HolidayTimerController extends Controller
     }
 
 /**
- * Create a new CosOpen instance
+ * Create a new HolidayTimer instance
  * 
  * @param  Request
  * @return New HolidayTimer

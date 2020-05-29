@@ -90,7 +90,7 @@ class AstAmiController extends Controller
 
         $validator = Validator::make($request->all(),[
             'target' => 'required|numeric', 
-            'ringback' => 'required',
+            'ringback' => 'required|numeric',
             'context',
             'clid' => 'numeric'
         ]);

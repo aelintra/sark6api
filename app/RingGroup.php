@@ -14,8 +14,7 @@ class RingGroup extends Model
     public $timestamps = false;
 
     protected $attributes = [
-    'callerid' => null,
-	'calleridname' => null,
+
 	'cluster' => 'default', 
 	'devicerec' => 'default',
 	'dialparamshunt' => 'cIkt',
@@ -31,12 +30,12 @@ class RingGroup extends Model
 	'pagegroup' => null,
 	'ringdelay' => 20,
 	'speedalert' => null
-
     ];
 
     // none user updateable columns
     protected $guarded = [
-
+    'callerid' => null,
+    'calleridname' => null,
     'greeting',
     'outcomerouteclass',
     'trunk',
@@ -47,6 +46,8 @@ class RingGroup extends Model
 
     // hidden columns (mostly no longer used)
     protected $hidden = [
+    'callerid' => null,
+    'calleridname' => null,        
     'greeting',	
     'outcomerouteclass',
     'trunk'
