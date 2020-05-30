@@ -27,6 +27,7 @@ Route::delete('agents/{agent}', 'AgentController@delete');
 
 Route::get('astamis', 'AstAmiController@index');
 
+Route::get('astamis/ConfbridgeList/{id}', 'AstAmiController@mconfbridgelist');
 Route::get('astamis/CoreSettings', 'AstAmiController@coresettings');
 Route::get('astamis/CoreStatus', 'AstAmiController@corestatus');
 

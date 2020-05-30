@@ -138,7 +138,12 @@ class AstAmiController extends Controller
         $amirets [$request->key] = $amiHandle->amiQuery($amiArgs);
         $amiHandle->logout();
         return response()->json(['Response' => 'Reload sent'],200); 
-    }     
+    } 
+
+    public function cinfbridgelist (Request $request) {      
+        $this->eventItem['ConfbridgeList']['Conference'] = $request->id;
+        return $this->getinstance($request,'ConfbridgeList');
+    }         
 
     public function extensionstate (Request $request) {
         $this->eventItem['ExtensionState']['Exten'] = $request->id;
