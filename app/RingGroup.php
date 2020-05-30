@@ -46,8 +46,8 @@ class RingGroup extends Model
 
     // hidden columns (mostly no longer used)
     protected $hidden = [
-    'callerid' => null,
-    'calleridname' => null,        
+    'callerid',
+    'calleridname',        
     'greeting',	
     'outcomerouteclass',
     'trunk'
