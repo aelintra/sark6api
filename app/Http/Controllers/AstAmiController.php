@@ -140,7 +140,7 @@ class AstAmiController extends Controller
         return response()->json(['Response' => 'Reload sent'],200); 
     } 
 
-    public function cinfbridgelist (Request $request) {      
+    public function confbridgelist (Request $request) {      
         $this->eventItem['ConfbridgeList']['Conference'] = $request->id;
         return $this->getinstance($request,'ConfbridgeList');
     }         
