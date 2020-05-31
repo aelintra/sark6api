@@ -26,6 +26,7 @@ class AstAmiController extends Controller
                 'ConfbridgeList',
                 'ConfbridgeListRooms',        
                 'CoreShowChannels',
+                'DeviceStateList',                
                 'ExtensionStateList',
                 'IAXpeers',
                 'IAXregistry',
