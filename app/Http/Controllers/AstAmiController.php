@@ -105,23 +105,19 @@ class AstAmiController extends Controller
 
         $amiHandle = get_ami_handle();
 
-        $amisiprets = $amiHandle->originateCall(
+        $amirets = $amiHandle->originateCall(
                 $request->target, 
                 'Local/' . $request->ringback . '@internal',
                 'internal', 
                 $request->ringback
         );      
-
-/*
-        $amirets [$request->key] = $amiHandle->originateCall(
-                    $request->target, 
-                    $request->ringback, 
-                    $request->context, 
-                    $request->clid
-        ); 
-*/
         $amiHandle->logout();
-        return response()->json($amirets,200);      
+        if (!empty($amirets)) {
+            return response()->json($amirets,200);
+        }
+        else {
+            return response()->json(['message' => 'Request Sent'],200);
+        }      
     }
 
     public function dbget (Request $request) {   
