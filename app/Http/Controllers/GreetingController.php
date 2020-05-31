@@ -96,7 +96,7 @@ class GreetingController extends Controller
 
 // Don't allow deletion of default tenant
 
-        if (!file_exists("/usr/share/asterisk/$greeting")) {
+        if (!file_exists("/usr/share/asterisk/sounds/$greeting")) {
            return Response::json(['Error' => "$greeting not found in sounds set"],404); 
         }
 
