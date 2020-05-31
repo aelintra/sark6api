@@ -250,9 +250,9 @@ class AstAmiController extends Controller
         $amiArgs = "Action: " . $request->action . "\r\n";
 
 /*
-    Corner case of ConfbridgeList.   It is a list but also requires a parameter.
+    Corner case of ConfbridgeList.   It is a list but also requires a Conference room parameter.
  */
-        if (\Request::is('ConfbridgeList')) { 
+        if (preg_match("/ConfbridgeList/", $request->path() )) {
             $amiArgs .= "Conference: " . $request->id . "\r\n";
         }
 

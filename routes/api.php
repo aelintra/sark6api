@@ -30,7 +30,6 @@ Route::get('astamis', 'AstAmiController@index');
 //Route::get('astamis/ConfbridgeList/{id}', 'AstAmiController@confbridgelist');
 Route::get('astamis/CoreSettings', 'AstAmiController@coresettings');
 Route::get('astamis/CoreStatus', 'AstAmiController@corestatus');
-
 Route::get('astamis/DBget/{id}/{key}', 'AstAmiController@dbget');
 Route::get('astamis/ExtensionState/{id}{context?}', 'AstAmiController@extensionstate');
 Route::get('astamis/MailboxCount/{id}', 'AstAmiController@mailboxcount');
@@ -39,12 +38,10 @@ Route::get('astamis/QueueStatus/{id}', 'AstAmiController@queuestatus');
 Route::get('astamis/QueueSummary/{id}', 'AstAmiController@queuesummary');
 Route::get('astamis/Reload', 'AstAmiController@reload');
 Route::get('astamis/SIPshowpeer/{id}', 'AstAmiController@sipshowpeer');
-Route::get('astamis/{action}/{id?}', 'AstAmiController@getlist');
-
 Route::post('astamis/originate', 'AstAmiController@originate');
-
 Route::put('astamis/DBdel/{id}/{key}', 'AstAmiController@dbdel');
 Route::put('astamis/DBput/{id}/{key}/{value}', 'AstAmiController@dbput');
+Route::get('astamis/{action}/{id?}', 'AstAmiController@getlist');
 
 Route::get('backups', 'BackupController@index');
 Route::get('backups/new', 'BackupController@new');
