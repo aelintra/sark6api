@@ -23,7 +23,7 @@ class AstAmiController extends Controller
 {   
         protected $eventList = [
                 'Agents', 
-                'CobfbridgeList',
+                'ConfbridgeList',
                 'ConfbridgeListRooms',        
                 'CoreShowChannels',
                 'ExtensionStateList',
