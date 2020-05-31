@@ -78,9 +78,9 @@ class GreetingController extends Controller
 
         $fullpath = storage_path() . "/app/" . $fpath;
 
-        shell_exec("/usr/bin/sudo /bin/mv $fullpath /usr/share/asterisk/sounds/");
-        shell_exec("/usr/bin/sudo /bin/chown asterisk:asterisk /usr/share/asterisk/sounds/$filename");
-        shell_exec("/usr/bin/sudo /bin/chmod 664 /usr/share/asterisk/sounds/$filename");
+        shell_exec("/bin/mv $fullpath /usr/share/asterisk/sounds/");
+        shell_exec("/bin/chown asterisk:asterisk /usr/share/asterisk/sounds/$filename");
+        shell_exec("/bin/chmod 664 /usr/share/asterisk/sounds/$filename");
                 
         return Response::json(['Uploaded ' . $filename],200);
 
