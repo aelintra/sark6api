@@ -112,12 +112,7 @@ class AstAmiController extends Controller
                 $request->clid
         );      
         $amiHandle->logout();
-        if (!empty($amirets)) {
-            return response()->json($amirets,200);
-        }
-        else {
-            return response()->json(['message' => 'Request Sent'],200);
-        }      
+        return response()->json(['message' => 'Request Sent'],200);      
     }
 
     public function dbget (Request $request) {   
