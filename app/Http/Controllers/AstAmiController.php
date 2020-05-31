@@ -104,13 +104,22 @@ class AstAmiController extends Controller
         }
 
         $amiHandle = get_ami_handle();
+
+        $amisiprets = $amiHandle->originateCall(
+                $request->target, 
+                'Local/' . $request->ringback . '@internal',
+                'internal', 
+                $request->ringback
+        );      
+
+/*
         $amirets [$request->key] = $amiHandle->originateCall(
                     $request->target, 
                     $request->ringback, 
                     $request->context, 
                     $request->clid
         ); 
-
+*/
         $amiHandle->logout();
         return response()->json($amirets,200);      
     }
