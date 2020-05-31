@@ -118,10 +118,6 @@ class SnapShotController extends Controller
         shell_exec("/bin/chown www-data:www-data /opt/sark/db/sark.db");
         shell_exec("/bin/chmod 644 /opt/sark/db/sark.db");
 
-        if ($rets != 200) {
-            return Response::json(['Error' => "$snapshot has errors see logs for details"],$rets); 
-        }
-
 		return response()->json(['restored' => $snapshot], 200);
     }   
 
