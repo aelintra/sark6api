@@ -27,7 +27,7 @@ Route::delete('agents/{agent}', 'AgentController@delete');
 
 Route::get('astamis', 'AstAmiController@index');
 
-Route::get('astamis/ConfbridgeList/{id}', 'AstAmiController@confbridgelist');
+//Route::get('astamis/ConfbridgeList/{id}', 'AstAmiController@confbridgelist');
 Route::get('astamis/CoreSettings', 'AstAmiController@coresettings');
 Route::get('astamis/CoreStatus', 'AstAmiController@corestatus');
 
@@ -39,7 +39,7 @@ Route::get('astamis/QueueStatus/{id}', 'AstAmiController@queuestatus');
 Route::get('astamis/QueueSummary/{id}', 'AstAmiController@queuesummary');
 Route::get('astamis/Reload', 'AstAmiController@reload');
 Route::get('astamis/SIPshowpeer/{id}', 'AstAmiController@sipshowpeer');
-Route::get('astamis/{action}', 'AstAmiController@getlist');
+Route::get('astamis/{action}/{id?}', 'AstAmiController@getlist');
 
 Route::post('astamis/originate', 'AstAmiController@originate');
 

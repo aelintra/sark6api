@@ -23,6 +23,7 @@ class AstAmiController extends Controller
 {   
         protected $eventList = [
                 'Agents', 
+                'CobfbridgeList',
                 'ConfbridgeListRooms',        
                 'CoreShowChannels',
                 'ExtensionStateList',
@@ -38,9 +39,11 @@ class AstAmiController extends Controller
             ];
 
         protected $eventItem = [
+/*
                 'ConfbridgeList' => [
                     'Conference' => null
                     ],
+*/
                 'ExtensionState' => [
                     'Exten' => null,
                     'Context' => 'extensions',
@@ -139,12 +142,12 @@ class AstAmiController extends Controller
         $amiHandle->logout();
         return response()->json(['Response' => 'Reload sent'],200); 
     } 
-
+/*
     public function confbridgelist (Request $request) {      
         $this->eventItem['ConfbridgeList']['Conference'] = $request->id;
         return $this->getinstance($request,'ConfbridgeList');
     }         
-
+*/
     public function extensionstate (Request $request) {
         $this->eventItem['ExtensionState']['Exten'] = $request->id;
         if (isset($request->Context)) {
@@ -236,11 +239,22 @@ class AstAmiController extends Controller
            
     public function getlist (Request $request) {
 
+        if (! pbx_is_running() ) {
+            return response()->json(['message' => 'PBX not running'],503);
+        }         
+
         if (!in_array($request->action,$this->eventList)) {
             return response()->json(['message' => 'AMI Action invalid or unsupported'],404);
         }
 
         $amiArgs = "Action: " . $request->action . "\r\n";
+
+/*
+    Corner case of ConfbridgeList.   It is a list but also requires a parameter.
+ */
+        if (\Request::is('ConfbridgeList')) { 
+            $amiArgs .= "Conference: " . $request->id . "\r\n";
+        }
 
         $amiHandle = get_ami_handle();
         $amirets = $amiHandle->amiQuery($amiArgs);
