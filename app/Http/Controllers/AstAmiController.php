@@ -94,7 +94,7 @@ class AstAmiController extends Controller
 
         $validator = Validator::make($request->all(),[
             'target' => 'required|numeric', 
-            'ringback' => 'required|numeric',
+            'caller' => 'required|numeric',
             'context',
             'clid' => 'numeric'
         ]);
@@ -107,9 +107,9 @@ class AstAmiController extends Controller
 
         $amirets = $amiHandle->originateCall(
                 $request->target, 
-                'Local/' . $request->ringback . '@internal',
+                'Local/' . $request->caller . '@internal',
                 'internal', 
-                $request->ringback
+                $request->clid
         );      
         $amiHandle->logout();
         if (!empty($amirets)) {
