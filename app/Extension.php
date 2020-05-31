@@ -46,6 +46,7 @@ transport=\$transport
 encryption=\$encryption",
     	'sndcreds' => 'Always',
     	'transport' => 'udp',
+        'technology' => 'SIP'
     	'z_updater' => 'system'
 
     ];
