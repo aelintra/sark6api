@@ -66,7 +66,7 @@ class FirewallController extends Controller
 
         $tempFileName = $this->set_new_rules($request);
 
-        shell_exec("sudo /bin/mv /tmp/$tempFileName /etc/shorewall/sark_rules");
+        shell_exec("/bin/mv /tmp/$tempFileName /etc/shorewall/sark_rules");
 
 		return response()->json(['message' => "saved sark_rules"], 200);
     }  
@@ -91,7 +91,7 @@ class FirewallController extends Controller
 
         $tempFileName = $this->set_new_rules($request);
 
-        shell_exec("sudo /bin/mv /tmp/$tempFileName /etc/shorewall6/sark_rules6");
+        shell_exec("/bin/mv /tmp/$tempFileName /etc/shorewall6/sark_rules6");
 
         return response()->json(['message' => "saved sark_rules"], 200);
     }

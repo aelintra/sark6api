@@ -196,7 +196,7 @@ if (!function_exists('create_new_backup')) {
             '/tmp/sark.local.ldif'
         ];
 
-        shell_exec('sudo /usr/sbin/slapcat > /tmp/sark.local.ldif');
+        shell_exec('/usr/sbin/slapcat > /tmp/sark.local.ldif');
         $newBackupName = "sarkbak." . time() . ".zip";
        
         foreach($backupSet as $file) { 
@@ -208,9 +208,9 @@ if (!function_exists('create_new_backup')) {
                 Log::info($file . " not found");
             }
         } 
-        shell_exec("sudo /bin/mv /tmp/$newBackupName /opt/sark/bkup/");
-        shell_exec("sudo /bin/chown www-data:www-data /opt/sark/bkup/$newBackupName ");
-        shell_exec("sudo /bin/chmod 644 /opt/sark/bkup/$newBackupName ");
+        shell_exec("/bin/mv /tmp/$newBackupName /opt/sark/bkup/");
+        shell_exec("/bin/chown www-data:www-data /opt/sark/bkup/$newBackupName ");
+        shell_exec("/bin/chmod 664 /opt/sark/bkup/$newBackupName ");
         return $newBackupName;  
 
     }
@@ -229,9 +229,9 @@ if (!function_exists('create_new_snapshot')) {
     function create_new_snapshot() {
 
         $newSnapshotName = "sark.db." . time();
-        shell_exec("sudo /bin/cp /opt/sark/db/sark.db /opt/sark/snap/$newSnapshotName");
-        shell_exec("sudo /bin/chown www-data:www-data /opt/sark/snap/$newSnapshotName");
-        shell_exec("sudo /bin/chmod 644 /opt/sark/snap/$newSnapshotName");
+        shell_exec("/bin/cp /opt/sark/db/sark.db /opt/sark/snap/$newSnapshotName");
+        shell_exec("/bin/chown www-data:www-data /opt/sark/snap/$newSnapshotName");
+        shell_exec("/bin/chmod 664 /opt/sark/snap/$newSnapshotName");
         return $newSnapshotName;  
 
     }
@@ -256,8 +256,8 @@ function restore_from_backup($request) {
  */
 
     $tempDname = "/tmp/bkup" . time();
-    shell_exec("sudo /bin/mkdir $tempDname");
-    $unzipCmd = "sudo /usr/bin/unzip /opt/sark/bkup/" . $request->backup . " -d $tempDname";
+    shell_exec("/bin/mkdir $tempDname");
+    $unzipCmd = "/usr/bin/unzip /opt/sark/bkup/" . $request->backup . " -d $tempDname";
     shell_exec($unzipCmd);
     if (!file_exists($tempDname)) {
         Log::info("Restore unzip did not create a directory!");
@@ -270,11 +270,11 @@ function restore_from_backup($request) {
     if ( $request->restoredb === true) {
         if (file_exists($tempDname . '/opt/sark/db/sark.db')) {
             Log::info("Restoring the Database from $tempDname/opt/sark/db/sark.db");
-            shell_exec("sudo /bin/cp -f $tempDname/opt/sark/db/sark.db  /opt/sark/db/sark.db");
+            shell_exec("/bin/cp -f $tempDname/opt/sark/db/sark.db  /opt/sark/db/sark.db");
             Log::info("Setting DB ownership");
-            shell_exec("sudo /bin/chown www-data:www-data  /opt/sark/db/sark.db");
+            shell_exec("/bin/chown www-data:www-data  /opt/sark/db/sark.db");
             Log::info("Running the reloader to sync versions");
-            shell_exec("sudo /bin/sh /opt/sark/scripts/srkV4reloader.sh");      
+            shell_exec("/bin/sh /opt/sark/scripts/srkV4reloader.sh");      
             Log::info("Database restore complete");
             Log::info("Database RESTORED");
         }
@@ -290,8 +290,9 @@ function restore_from_backup($request) {
     if ( $request->restoreasterisk === true ) {
         if (file_exists($tempDname . '/etc/asterisk')) {
             shell_exec("sudo /bin/rm -rf /etc/asterisk/*");
-            shell_exec("sudo /bin/cp -a  $tempDname/etc/asterisk/* /etc/asterisk");
-            shell_exec("sudo /bin/chown asterisk:asterisk /etc/asterisk/*");
+            shell_exec("/bin/cp -a  $tempDname/etc/asterisk/* /etc/asterisk");
+            shell_exec("/bin/chown asterisk:asterisk /etc/asterisk/*");
+            shell_exec("/bin/chmod 664 /etc/asterisk/*");
             Log::info("Asterisk files RESTORED");
         }
         else {
@@ -305,9 +306,11 @@ function restore_from_backup($request) {
                         
     if ( $request->restoreusergreets  === true) {
         if (glob($tempDname . '/usr/share/asterisk/sounds/usergreeting*')) {
-            shell_exec("sudo /bin/rm -rf /usr/share/asterisk/sounds/usergreeting*");
-            shell_exec("sudo /bin/cp -a  $tempDname/usr/share/asterisk/sounds/usergreeting* /usr/share/asterisk/sounds");
-            shell_exec("sudo / bin/chown asterisk:asterisk /usr/share/asterisk/sounds/usergreeting*");
+            shell_exec("/bin/rm -rf /usr/share/asterisk/sounds/usergreeting*");
+            shell_exec("/bin/cp -a  $tempDname/usr/share/asterisk/sounds/usergreeting* /usr/share/asterisk/sounds");
+            shell_exec("/bin/chown asterisk:asterisk /usr/share/asterisk/sounds/usergreeting*");
+            shell_exec("/bin/chmod 664 /usr/share/asterisk/sounds/usergreeting*");
+
             Log::info("Greeting files RESTORED");
         }
         else {
@@ -321,9 +324,10 @@ function restore_from_backup($request) {
         
     if ( $request->restorevmail === true) {
         if (file_exists($tempDname . '/var/spool/asterisk/voicemail/default')) {
-            shell_exec("sudo /bin/rm -rf /var/spool/asterisk/voicemail/default");
-            shell_exec("sudo /bin/cp -a $tempDname/var/spool/asterisk/voicemail/default /var/spool/asterisk/voicemail");
-            shell_exec("sudo /bin/chown -R asterisk:asterisk /var/spool/asterisk/voicemail/default");
+            shell_exec("/bin/rm -rf /var/spool/asterisk/voicemail/default");
+            shell_exec("/bin/cp -a $tempDname/var/spool/asterisk/voicemail/default /var/spool/asterisk/voicemail");
+            shell_exec("/bin/chown -R asterisk:asterisk /var/spool/asterisk/voicemail/default");
+            shell_exec("/bin/chmod 664 /var/spool/asterisk/voicemail/default");
             Log::info("Voicemail files RESTORED");
         }
         else {
@@ -353,10 +357,10 @@ function restore_from_backup($request) {
         Log::info("LDAP Directory PRESERVED");    
     }   
     
-    shell_exec("sudo /bin/rm -rf $tempDname");
+    shell_exec("/bin/rm -rf $tempDname");
     Log::info("Temporary work files deleted");
     Log::info("Requesting Asterisk reload");
-    shell_exec("sudo /bin/sh /opt/sark/scripts/srkreload");
+    shell_exec("/bin/sh /opt/sark/scripts/srkreload");
     Log::info("System Regen complete");
 
     return 200; 
