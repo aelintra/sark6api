@@ -114,7 +114,7 @@ class SnapShotController extends Controller
             return Response::json(['Error' => "snapshot file not found"],404);
         } 
 
-        shell_exec("/bin/cp /opt/sark/snap/sark.db /opt/sark/db/sark.db");
+        shell_exec("/bin/cp /opt/sark/snap/$snapshot /opt/sark/db/sark.db");
         shell_exec("/bin/chown www-data:www-data /opt/sark/db/sark.db");
         shell_exec("/bin/chmod 644 /opt/sark/db/sark.db");
 
