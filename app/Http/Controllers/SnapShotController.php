@@ -116,7 +116,7 @@ class SnapShotController extends Controller
 
         shell_exec("/bin/cp /opt/sark/snap/$snapshot /opt/sark/db/sark.db");
         shell_exec("/bin/chown www-data:www-data /opt/sark/db/sark.db");
-        shell_exec("/bin/chmod 644 /opt/sark/db/sark.db");
+        shell_exec("/bin/chmod 664 /opt/sark/db/sark.db");
 
 		return response()->json(['restored' => $snapshot], 200);
     }   
