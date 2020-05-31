@@ -80,7 +80,7 @@ class GreetingController extends Controller
 
         shell_exec("/usr/bin/sudo /bin/mv $fullpath /usr/share/asterisk/sounds/");
         shell_exec("/usr/bin/sudo /bin/chown asterisk:asterisk /usr/share/asterisk/sounds/$filename");
-        shell_exec("/usr/bin/sudo /bin/sudo /bin/chmod 664 /usr/share/asterisk/sounds/$filename");
+        shell_exec("/usr/bin/sudo /bin/chmod 664 /usr/share/asterisk/sounds/$filename");
                 
         return Response::json(['Uploaded ' . $filename],200);
 
