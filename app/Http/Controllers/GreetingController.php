@@ -100,7 +100,7 @@ class GreetingController extends Controller
            return Response::json(['Error' => "$greeting not found in sounds set"],404); 
         }
 
-        shell_exec("/bin/rm -r /usr/share/asterisk/$greeting");
+        shell_exec("/bin/rm -r /usr/share/asterisk/sounds/$greeting");
 
         return response()->json(null, 204);
     }
