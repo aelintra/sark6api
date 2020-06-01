@@ -37,8 +37,8 @@ if (!function_exists('move_request_to_model')) {
 if (!function_exists('get_location')) {
     function get_location() {
         $globals = get_globals();
-        $location = $globals->natdefault;
-        if ($globals->vcl) {
+        $location = $globals->NATDEFAULT;
+        if ($globals->VCL) {
             $location = 'remote';
         } 
         return $location;       
