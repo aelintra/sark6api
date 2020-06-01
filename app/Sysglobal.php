@@ -138,7 +138,7 @@ class Sysglobal extends Model
     		'UNDONUM',
     		'UNDOONOFF',
     		'USBRECDISK',
-    		'VCL',
+//    		'VCL',
     		'VCLFULL',
     		'VLIBS',
     		'XMPP',

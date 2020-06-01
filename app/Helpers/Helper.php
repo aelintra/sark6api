@@ -34,6 +34,23 @@ if (!function_exists('move_request_to_model')) {
 
 }
 
+if (!function_exists('get_location')) {
+    function get_location() {
+        $globals = get_globals();
+        $location = $globals->natdefault;
+        if ($globals->vcl) {
+            $location = 'remote';
+        } 
+        return $location;       
+    }
+}
+
+if (!function_exists('get_globals')) {
+    function get_globals() {
+        return DB::table('globals')->first();
+    }
+}
+
 if (!function_exists('valid_ip_or_domain')) {
     /**
      * checks host for valid IP or valid domain name

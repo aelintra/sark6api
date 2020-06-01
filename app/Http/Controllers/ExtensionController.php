@@ -88,12 +88,14 @@ class ExtensionController extends Controller
     	if ($validator->fails()) {
     		return response()->json($validator->errors(),422);
     	}
+
     	try {
     		$extension = Extension::create([
     			'pkey' => $request->post('pkey'),
     			'desc' => 'MAILBOX',
     			'device' => 'MAILBOX',
-    			'cluster' => $request->post('cluster')
+    			'cluster' => $request->post('cluster'),
+                'location' => 'local'
     			]);
     	} catch (\Exception $e) {
     		return Response::json(['Error' => $e->getMessage()],409);
@@ -119,12 +121,16 @@ class ExtensionController extends Controller
     	if ($validator->fails()) {
     		return response()->json($validator->errors(),422);
     	}
+
+        $location = get_location();
+
     	try {
     		$extension = Extension::create([
     			'pkey' => $request->post('pkey'),
     			'desc' => 'Ext' .$request->post('pkey'),
     			'device' => 'General SIP',
-    			'cluster' => $request->post('cluster')
+    			'cluster' => $request->post('cluster'),
+                'location' => $location;
     			]);
     	} catch (\Exception $e) {
     		return Response::json(['Error' => $e->getMessage()],409);
@@ -182,6 +188,8 @@ class ExtensionController extends Controller
     	$provision .= "#INCLUDE " .  $device . '.udp' . "\n";
     	$provision .= "#INCLUDE " .  $device . '.ipv4' . "\n";
 
+        $location = get_location();
+
     	// store it
 
     	try {
@@ -190,7 +198,8 @@ class ExtensionController extends Controller
         		'provision' => $provision,
         		'device' => $device,
         		'cluster' => $request->post('cluster'),
-        		'macaddr' => $request->post('macaddr')
+        		'macaddr' => $request->post('macaddr'),
+                'location' => $location;
         	]);
         } catch (\Exception $e) {
    			return Response::json(['Error' => $e->getMessage()],409);
