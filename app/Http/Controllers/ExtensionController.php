@@ -130,7 +130,7 @@ class ExtensionController extends Controller
     			'desc' => 'Ext' .$request->post('pkey'),
     			'device' => 'General SIP',
     			'cluster' => $request->post('cluster'),
-                'location' => $location;
+                'location' => $location
     			]);
     	} catch (\Exception $e) {
     		return Response::json(['Error' => $e->getMessage()],409);
@@ -199,7 +199,7 @@ class ExtensionController extends Controller
         		'device' => $device,
         		'cluster' => $request->post('cluster'),
         		'macaddr' => $request->post('macaddr'),
-                'location' => $location;
+                'location' => $location
         	]);
         } catch (\Exception $e) {
    			return Response::json(['Error' => $e->getMessage()],409);
