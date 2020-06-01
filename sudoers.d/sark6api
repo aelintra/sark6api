@@ -5,7 +5,6 @@ www-data ALL=NOPASSWD: /sbin/shorewall6
 www-data ALL=NOPASSWD: /sbin/reboot
 www-data ALL=NOPASSWD: /bin/rm -rf /etc/asterisk/*
 www-data ALL=NOPASSWD: /bin/rm -rf /var/lib/ldap/*
-www-data ALL=NOPASSWD: /bin/chown openldap:openldap /var/lib/ldap/*
 www-data ALL=NOPASSWD: /bin/systemctl stop asterisk
 www-data ALL=NOPASSWD: /bin/systemctl start asterisk
 
