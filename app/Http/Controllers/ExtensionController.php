@@ -123,7 +123,7 @@ class ExtensionController extends Controller
     		$extension = Extension::create([
     			'pkey' => $request->post('pkey'),
     			'desc' => 'Ext' .$request->post('pkey'),
-    			'device' => 'GeneralSIP',
+    			'device' => 'General SIP',
     			'cluster' => $request->post('cluster')
     			]);
     	} catch (\Exception $e) {
@@ -138,7 +138,7 @@ class ExtensionController extends Controller
 	}
 
 /**
- * Create a new unprovisioned extension instance
+ * Create a new provisioned extension instance
  * 
  * @param  Request
  * @return New provisioned Extension
