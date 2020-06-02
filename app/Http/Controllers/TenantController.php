@@ -58,7 +58,7 @@ class TenantController extends Controller
     	$this->updateableColumns['pkey'] = 'required';
     	$this->updateableColumns['description'] = 'string|required';
 
-    	$validator = Validator::make($request->all(),$this->updateableColumns);ß
+    	$validator = Validator::make($request->all(),$this->updateableColumns);
 
     	if ($validator->fails()) {
     		return response()->json($validator->errors(),422);
