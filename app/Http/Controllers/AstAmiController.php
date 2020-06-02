@@ -253,7 +253,7 @@ class AstAmiController extends Controller
 /*
     Corner case of ConfbridgeList.   It is a list but also requires a Conference room parameter.
  */
-        if (preg_match("/ConfbridgeList/", $request->path() )) {
+        if (preg_match("/ConfbridgeList$/", $request->path() )) {
             $amiArgs .= "Conference: " . $request->id . "\r\n";
         }
 
