@@ -84,9 +84,9 @@ class TrunkController extends Controller
 
     	$validator = Validator::make($request->all(),$this->updateableColumns);
 
-        $validator->after(function ($validator) use ($request,$trunk) {
+        $validator->after(function ($validator) use ($request) {
 //Check if key exists
-            if ($trunk->where('pkey','=',$request->pkey)->count()) {
+            if (Trunk::where('pkey','=',$request->pkey)->count()) {
                 $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
                 return;
             }                 
