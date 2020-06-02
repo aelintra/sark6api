@@ -119,7 +119,7 @@ class ExtensionController extends Controller
  * @return New Unprovisioned Extension
  */
 
-    public function unprovisioned(Request $request) {
+    public function unprovisioned(Request $request, Extension $extension) {
 
     	$validator = Validator::make($request->all(),[
     		'pkey' => 'required',
