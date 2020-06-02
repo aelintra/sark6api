@@ -89,7 +89,7 @@ class ExtensionController extends Controller
     		return response()->json($validator->errors(),422);
     	}
 
-        $validator->after(function ($validator) use ($request,$extension) {
+        $validator->after(function ($validator) use ($request) {
 //Check if key exists
             if (Extension::where('pkey','=',$request->pkey)->count()) {
                 $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
@@ -126,7 +126,7 @@ class ExtensionController extends Controller
     		'cluster' => 'required|exists:cluster,pkey'
     	]);
 
-        $validator->after(function ($validator) use ($request,$extension) {
+        $validator->after(function ($validator) use ($request) {
 //Check if key exists
             if (Extension::where('pkey','=',$request->pkey)->count()) {
                 $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
@@ -174,7 +174,7 @@ class ExtensionController extends Controller
     		'macaddr' => 'required|regex:/^[0-9a-fA-F]{12}$/'
     	]);
 
-        $validator->after(function ($validator) use ($request,$extension) {
+        $validator->after(function ($validator) use ($request) {
 //Check if key exists
             if (Extension::where('pkey','=',$request->pkey)->count()) {
                 $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
