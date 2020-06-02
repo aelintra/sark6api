@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\CustomClasses\Ami;
 
+if (!function_exists('sark_database_key_exists')) {
+    function sark_database_key_exists($candidateKey) {
+        return DB::table('master_xref')->where('pkey' '=' $candidateKey)->count();    
+    }
+}
 
 if (!function_exists('move_request_to_model')) {
     /**

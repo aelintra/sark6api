@@ -64,6 +64,10 @@ class TenantController extends Controller
     		return response()->json($validator->errors(),422);
     	}
 
+        if ( sark_database_key_exists ($request->pkey)) {
+           return Response::json(['Error' => 'Key already exists'],409); 
+        }
+
     	$tenant = new Tenant;
 // Move post variables to the model 
 
