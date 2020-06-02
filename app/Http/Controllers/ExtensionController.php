@@ -91,7 +91,7 @@ class ExtensionController extends Controller
 
         $validator->after(function ($validator) use ($request,$extension) {
 //Check if key exists
-            if ($extension->where('pkey','=',$request->pkey)->count()) {
+            if (Extension::where('pkey','=',$request->pkey)->count()) {
                 $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
                 return;
             }                 
@@ -119,7 +119,7 @@ class ExtensionController extends Controller
  * @return New Unprovisioned Extension
  */
 
-    public function unprovisioned(Request $request, Extension $extension) {
+    public function unprovisioned(Request $request) {
 
     	$validator = Validator::make($request->all(),[
     		'pkey' => 'required',
@@ -128,7 +128,7 @@ class ExtensionController extends Controller
 
         $validator->after(function ($validator) use ($request,$extension) {
 //Check if key exists
-            if ($extension->where('pkey','=',$request->pkey)->count()) {
+            if (Extension::where('pkey','=',$request->pkey)->count()) {
                 $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
                 return;
             }                 
@@ -176,7 +176,7 @@ class ExtensionController extends Controller
 
         $validator->after(function ($validator) use ($request,$extension) {
 //Check if key exists
-            if ($extension->where('pkey','=',$request->pkey)->count()) {
+            if (Extension::where('pkey','=',$request->pkey)->count()) {
                 $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
                 return;
             }                 
