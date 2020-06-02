@@ -85,6 +85,15 @@ class ExtensionController extends Controller
     		'cluster' => 'required|exists:cluster,pkey'
     	]);
 
+        $validator->after(function ($validator) use ($request,$classofservice) {
+
+//Check if key exists
+            if ($extension->where('pkey','=',$request->pkey)->count()) {
+                $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
+                return;
+            }                 
+        });  
+
     	if ($validator->fails()) {
     		return response()->json($validator->errors(),422);
     	}
@@ -117,6 +126,15 @@ class ExtensionController extends Controller
     		'pkey' => 'required',
     		'cluster' => 'required|exists:cluster,pkey'
     	]);
+
+        $validator->after(function ($validator) use ($request,$classofservice) {
+
+//Check if key exists
+            if ($extension->where('pkey','=',$request->pkey)->count()) {
+                $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
+                return;
+            }                 
+        });        
 
     	if ($validator->fails()) {
     		return response()->json($validator->errors(),422);
@@ -157,6 +175,15 @@ class ExtensionController extends Controller
     		'cluster' => 'required|exists:cluster,pkey',
     		'macaddr' => 'required|regex:/^[0-9a-fA-F]{12}$/'
     	]);
+
+        $validator->after(function ($validator) use ($request,$classofservice) {
+
+//Check if key exists
+            if ($extension->where('pkey','=',$request->pkey)->count()) {
+                $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
+                return;
+            }                 
+        });  
 
     	$device=null;
 

@@ -97,6 +97,12 @@ class IvrController extends Controller
 
         $validator->after(function ($validator) use ($request,$ringgroup) {
 
+//Check if key exists
+            if ($ivr->where('pkey','=',$request->pkey)->count()) {
+                $validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
+                return;
+            }                              
+
             if($this->check_options($request, $ivr, $validator) == 404) {
                 return;
             }
