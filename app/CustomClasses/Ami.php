@@ -308,7 +308,7 @@ class Ami
 //
 //            Response::make(['message' => "No AMI Command in input"],503)->send();
 //        }
-
+        Log::info("Ami Response\n $response \n\n");
         return $response;
     }
 

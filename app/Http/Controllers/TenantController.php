@@ -58,13 +58,13 @@ class TenantController extends Controller
     	$this->updateableColumns['pkey'] = 'required';
     	$this->updateableColumns['description'] = 'string|required';
 
-    	$validator = Validator::make($request->all(),$this->updateableColumns);
+    	$validator = Validator::make($request->all(),$this->updateableColumns);ß
 
     	if ($validator->fails()) {
     		return response()->json($validator->errors(),422);
     	}
 
-        if ( sark_database_key_exists ($request->pkey)) {
+        if (Tenant::where('pkey','=',$request->pkey)->count()) {
            return Response::json(['Error' => 'Key already exists'],409); 
         }
 
