@@ -95,7 +95,7 @@ class IvrController extends Controller
 
     	$validator = Validator::make($request->all(),$this->updateableColumns);
 
-        $validator->after(function ($validator) use ($request,$ringgroup) {
+        $validator->after(function ($validator) use ($request,$ivr) {
 
 //Check if key exists
             if ($ivr->where('pkey','=',$request->pkey)->count()) {
