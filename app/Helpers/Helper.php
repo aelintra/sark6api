@@ -6,7 +6,7 @@ use App\CustomClasses\Ami;
 
 if (!function_exists('sark_database_key_exists')) {
     function sark_database_key_exists($candidateKey) {
-        return DB::table('master_xref')->where('pkey' '=' $candidateKey)->count();    
+        return DB::table('master_xref')->where('pkey', '=', $candidateKey)->count();    
     }
 }
 
