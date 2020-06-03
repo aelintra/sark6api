@@ -408,7 +408,7 @@ if (!function_exists('get_ami_handle')) {
             Response::make(['message' => 'Service Unavailable - Could not connect to the PBX'],503)->send();
         }
         else {
-            $amiHandle->login('sark','mysark');
+            $amiHandle->login('sarkapi','sdfjv6GHf');
         } 
         return $amiHandle;  
     } 
