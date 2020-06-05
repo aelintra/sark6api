@@ -405,7 +405,7 @@ if (!function_exists('get_ami_handle')) {
         $amiHandle = new Ami($params);
         $amiconrets = $amiHandle->connect();
         if ( !$amiconrets ) {            
-            Response::make(['message' => 'Service Unavailable - Could not connect to the PBX'],503)->send();
+            Response::make(['message' => 'Service Unavailable - Could not connect to the PBX'],599)->send();
         }
         else {
             $amiHandle->login('sark','mysark');
