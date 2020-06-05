@@ -19,6 +19,7 @@ class GreetingController extends Controller
  */
     public function index () {
 
+
         $greetings = array();
     	if ($handle = opendir('/usr/share/asterisk/sounds')) {
             while (false !== ($entry = readdir($handle))) {
