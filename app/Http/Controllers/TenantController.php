@@ -17,7 +17,7 @@ class TenantController extends Controller
     		'chanmax' => 'integer',
 			'description' => 'string',
 			'include' => 'string|nullable',
-			'localarea' => 'integer|nullable',
+			'localarea' => 'numeric|nullable',
 			'localdplan' => [
 					'regex:/^(_?([XZN0-9]+)\.?)\$/',
 					'nullable'
