@@ -19,7 +19,7 @@ class TenantController extends Controller
 			'include' => 'string|nullable',
 			'localarea' => 'numeric|nullable',
 			'localdplan' => [
-					'regex:/^(_?([XZN0-9]+)\.?)\$/',
+					'regex:/^_X+$/',
 					'nullable'
 			],
 			'masteroclo' => 'in:AUTO,CLOSED',
