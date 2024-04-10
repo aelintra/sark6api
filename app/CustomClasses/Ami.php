@@ -631,12 +631,12 @@ class Ami
      * 
      * @return string|string
      */
-public function Hangup($channel) {
+public function Hangup($technology,$channel) {
 
     $this->_checkSocket();
         
     $response = $this->_sendCommand("Action: Hangup\r\nChannel: "
-        ."$channel\r\n\r\n");
+        ."$technology/$channel\r\n\r\n");
     
     return $response;
 }

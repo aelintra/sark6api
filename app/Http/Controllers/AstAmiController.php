@@ -50,6 +50,7 @@ class AstAmiController extends Controller
                     'Context' => 'extensions',
                 ],
                 'Hangup' => [
+                    'Technology' => null,
                     'Channel' => null,
                 ],                
                 'MailboxCount' => [
@@ -140,7 +141,8 @@ class AstAmiController extends Controller
     }  
     
     public function hangup (Request $request) {
-        $this->eventItem['Hangup']['Channel'] = $request->id;
+        $this->eventItem['Hangup']['Technology'] = $request->id;
+        $this->eventItem['Hangup']['Channel'] = $request->key;
         return $this->getinstance($request,'Hangup');
     }  
 
