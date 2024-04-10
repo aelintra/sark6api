@@ -624,6 +624,23 @@ class Ami
 	return FALSE;
 }
 
+    /**
+     * Hangup a live channel 
+     *
+     * @param string $channel 
+     * 
+     * @return string|string
+     */
+public function Hangup($channel) {
+
+    $this->_checkSocket();
+        
+    $response = $this->_sendCommand("Action: Hangup\r\nChannel: "
+        ."$channel\r\n\r\n");
+    
+    return $response;
+}
+
 
 
 /*	Haven't done this yet - sark doesn't need it

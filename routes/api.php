@@ -41,6 +41,7 @@ Route::get('astamis/SIPshowpeer/{id}', 'AstAmiController@sipshowpeer');
 Route::post('astamis/originate', 'AstAmiController@originate');
 Route::put('astamis/DBput/{id}/{key}/{value}', 'AstAmiController@dbput');
 Route::delete('astamis/DBdel/{id}/{key}', 'AstAmiController@dbdel');
+Route::delete('astamis/Hangup/{id}', 'AstAmiController@Hangup');
 Route::get('astamis/{action}/{id?}', 'AstAmiController@getlist');
 
 Route::get('backups', 'BackupController@index');

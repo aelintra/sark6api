@@ -23,7 +23,7 @@ class QueueController extends Controller
 
 /**
  *
- * @return Ring Groups
+ * @return Queues
  */
     public function index (Queue $queue) {
 

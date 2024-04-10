@@ -13,9 +13,9 @@ class LogController extends Controller
 	private $updateableColumns = [];
 
 /**
- * Return Greetings Index in name order asc
+ * Return CDRs
  * 
- * @return Greetings
+ * @return CDR file
  */
     public function index () {
 

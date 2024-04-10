@@ -71,10 +71,10 @@ class IvrController extends Controller
     }
 
 /**
- * Return named extension model instance
+ * Return named ivr model instance
  * 
- * @param  Extension
- * @return extension object
+ * @param  IVR
+ * @return IVR object
  */
     public function show (Ivr $ivr) {
 

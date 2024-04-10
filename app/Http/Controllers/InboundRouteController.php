@@ -45,10 +45,10 @@ class InboundRouteController extends Controller
     }
 
 /**
- * Return named extension model instance
+ * Return named route model instance
  * 
- * @param  Extension
- * @return extension object
+ * @param  route
+ * @return route object
  */
     public function show (InboundRoute $inboundroute) {
 

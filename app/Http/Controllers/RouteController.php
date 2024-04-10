@@ -28,7 +28,7 @@ class RouteController extends Controller
 
 /**
  *
- * @return Ring Groups
+ * @return Routes
  */
     public function index (Route $route) {
 
@@ -36,7 +36,7 @@ class RouteController extends Controller
     }
 
 /**
- * Return named queue model instance
+ * Return named route model instance
  * 
  * @param  Route
  * @return Route object
