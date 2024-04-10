@@ -49,6 +49,9 @@ class AstAmiController extends Controller
                     'Exten' => null,
                     'Context' => 'extensions',
                 ],
+                'Hangup' => [
+                    'Channel' => null,
+                ],                
                 'MailboxCount' => [
                     'Mailbox' => null
                 ],
@@ -134,7 +137,12 @@ class AstAmiController extends Controller
         $amirets [$request->key] = $amiHandle->delDB($request->id,$request->key);
         $amiHandle->logout();
         return response()->json($amirets,200);       
-    }    
+    }  
+    
+    public function hangup (Request $request) {
+        $this->eventItem['Hangup']['Channel'] = $request->id;
+        return $this->getinstance($request,'Hangup');
+    }  
 
     public function reload (Request $request) {   
         $amiHandle = get_ami_handle();
@@ -188,10 +196,6 @@ class AstAmiController extends Controller
 
     public function corestatus (Request $request) {
         return $this->getinstance($request,'CoreStatus');
-    }  
-
-    public function hangup (Request $request) {
-        return $this->getinstance($request,'Hangup');
     }  
 
     private function check_if_id_present ($request) {
