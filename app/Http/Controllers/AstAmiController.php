@@ -190,6 +190,10 @@ class AstAmiController extends Controller
         return $this->getinstance($request,'CoreStatus');
     }  
 
+    public function hangup (Request $request) {
+        return $this->getinstance($request,'Hangup');
+    }  
+
     private function check_if_id_present ($request) {
         if (empty( $request->id)) {
             return response()->json(['message' => 'No Key field in route'],404)->send();
