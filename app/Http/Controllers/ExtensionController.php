@@ -27,7 +27,7 @@ class ExtensionController extends Controller
     		'provision' => 'string|nullable',
     		'provisionwith' => 'in:IP,FQDN',
     		'sndcreds' => 'in:No,Once,Always',
-    		'transport' => 'in:udp,tcp,tls',
+    		'transport' => 'in:udp,tcp,tls,wss',
     		'vmailfwd' => 'email|nullable'
     	];
 
@@ -158,6 +158,54 @@ class ExtensionController extends Controller
 
     	return $extension;
 	}
+
+/**
+ * Create a new webrtc extension instance
+ * 
+ * @param  Request
+ * @return New webrtc Extension
+ */
+
+ public function webrtc(Request $request) {
+
+	$validator = Validator::make($request->all(),[
+		'pkey' => 'required',
+		'cluster' => 'required|exists:cluster,pkey'
+	]);
+
+	$validator->after(function ($validator) use ($request) {
+//Check if key exists
+		if (Extension::where('pkey','=',$request->pkey)->count()) {
+			$validator->errors()->add('save', "Duplicate Key - " . $request->pkey);
+			return;
+		}                 
+	});
+
+	if ($validator->fails()) {
+		return response()->json($validator->errors(),422);
+	}
+
+	$location = get_location();
+
+	try {
+		$extension = Extension::create([
+			'pkey' => $request->post('pkey'),
+			'desc' => 'Ext' .$request->post('pkey'),
+			'device' => 'WebRTC',
+			'transport' => 'wss',
+			'cluster' => $request->post('cluster'),
+			'location' => $location
+			]);
+	} catch (\Exception $e) {
+		return Response::json(['Error' => $e->getMessage()],409);
+	}
+
+// create default Class of service contraints
+
+	$this->create_default_cos_instances($extension);
+
+	return $extension;
+}
 
 /**
  * Create a new provisioned extension instance
