@@ -90,6 +90,7 @@ Route::post('extensions/mailbox', 'ExtensionController@mailbox');
 Route::post('extensions/provisioned', 'ExtensionController@provisioned');
 Route::post('extensions/vxt', 'ExtensionController@vxt');
 Route::post('extensions/unprovisioned', 'ExtensionController@unprovisioned');
+Route::post('extensions/webrtc', 'ExtensionController@webrtc');
 Route::put('extensions/{extension}', 'ExtensionController@update');
 Route::put('extensions/{extension}/runtime', 'ExtensionController@updateruntime');
 Route::delete('extensions/{extension}', 'ExtensionController@delete');
