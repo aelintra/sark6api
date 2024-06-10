@@ -425,4 +425,29 @@ if (!function_exists('pbx_is_running')) {
     }
 }
 
-
+if (!function_exists('ret_password')) {
+    function ret_password ($length = 12) {
+    /*
+     * generate a phone password
+     */ 
+        $password = "";
+        $possible = "2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ";
+        $maxlength = strlen($possible);
+        if ($length > $maxlength) {
+          $length = $maxlength;
+        }
+        $i = 0; 
+        while ($i < $length) { 
+          $char = substr($possible, mt_rand(0, $maxlength-1), 1);       
+          // have we already used this character in $password?
+          if (!strstr($password, $char)) { 
+            // no, so it's OK to add it onto the end of whatever we've already got...
+            $password .= $char;
+            // ... and increase the counter by one
+            $i++;
+          }
+    
+        }
+        return $password;
+    }
+}

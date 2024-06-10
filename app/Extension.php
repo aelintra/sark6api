@@ -22,8 +22,8 @@ class Extension extends Model
     	'devicerec' => 'default',
     	'cluster' => 'default',
     	'protocol' => 'IPV4',
+		'passwd' => ret_password(),
     	'provisionwith' => 'IP',
-
     	'sipiaxfriend' => 
     	"type=peer
 defaultuser=\$desc
@@ -59,6 +59,7 @@ encryption=\$encryption",
     		'dialstring',
     		'firstseen',
     		'lastseen',
+			'passwd',
     		'z_created',
     		'z_updated',
     		'newformat',
