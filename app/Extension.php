@@ -22,7 +22,6 @@ class Extension extends Model
     	'devicerec' => 'default',
     	'cluster' => 'default',
     	'protocol' => 'IPV4',
-		'passwd' => ret_password(),
     	'provisionwith' => 'IP',
     	'sipiaxfriend' => 
     	"type=peer
@@ -81,5 +80,13 @@ encryption=\$encryption",
     		'tls',
     		'twin'
     ];
+
+	public function __construct(array $attributes = array())
+	{
+    parent::__construct($attributes);
+
+    $this->attributes['passwd'] = ret_password(12);
+
+	}
 
 }
