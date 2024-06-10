@@ -77,6 +77,7 @@ encryption=\$encryption",
     		'externalip',
     		'newformat',
     		'openfirewall',
+			'sipiaxfriend',
     		'tls',
     		'twin'
     ];
